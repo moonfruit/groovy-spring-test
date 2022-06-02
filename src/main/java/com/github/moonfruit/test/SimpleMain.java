@@ -8,18 +8,17 @@ import org.codehaus.groovy.control.customizers.ASTTransformationCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import static java.util.Collections.singletonMap;
 
 @Component
-public class GroovyTest implements ApplicationRunner, BeanClassLoaderAware {
+public class SimpleMain implements CommandLineRunner, BeanClassLoaderAware {
 
-    private static final Logger log = LoggerFactory.getLogger(GroovyTest.class);
+    private static final Logger log = LoggerFactory.getLogger(SimpleMain.class);
 
-    private ClassLoader classLoader;
+    private ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
@@ -27,7 +26,7 @@ public class GroovyTest implements ApplicationRunner, BeanClassLoaderAware {
     }
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(String... args) {
         log.info("classLoader = {}", classLoader);
 
         CompilerConfiguration configuration = new CompilerConfiguration();
@@ -38,5 +37,9 @@ public class GroovyTest implements ApplicationRunner, BeanClassLoaderAware {
         GroovyClassLoader groovyClassLoader = new GroovyClassLoader(classLoader, configuration);
         Class<?> aClass = groovyClassLoader.parseClass("1+1");
         log.info("class = {}", aClass);
+    }
+
+    public static void main(String[] args) {
+        new SimpleMain().run(args);
     }
 }
