@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <groovy-lang.version>4.0.2</groovy-lang.version>
+        <groovy-lang.version>4.0.3</groovy-lang.version>
     </properties>
 
     <dependencies>
